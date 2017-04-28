@@ -1,0 +1,82 @@
+{
+	"name": "Maps2GPS",
+
+	"description": "Places a Google Maps box above a longitude and latitude box. Converts a pin-placement to a longitude and latitude.",
+
+    "authors": [
+        {
+            "name": "Scott J. Pearson",
+            "email": "scott.j.pearson@vanderbilt.edu"
+        }
+    ],
+	
+	"permissions": [
+		"hook_data_entry_form",
+		"hook_survey_page"
+	],
+
+	"links": {
+	},
+
+	"global-settings": [
+	],
+	
+	"project-settings": [
+        {
+            "key": "google-api-key",
+            "name": "Google API Key",
+            "required": true,
+            "type": "text",
+			"repeatable": false
+        },
+		{
+			"key": "instrument",
+			"name": "Form",
+			"required": true,
+			"type": "form-list",
+			"repeatable": true
+		},
+		{
+			"key": "longitude",
+			"name": "Longitude Field",
+			"required": true,
+			"type": "field-list",
+			"repeatable": false
+		},
+		{
+			"key": "latitude",
+			"name": "Latitude Field",
+			"required": true,
+			"type": "field-list",
+			"repeatable": false
+		},
+        {
+            "key": "default-zoom",
+            "name": "Default Google Zoom",
+            "required": false,
+            "type": "text",
+            "repeatable": false
+        },
+        {
+            "key": "default-latitude",
+            "name": "Default Latitude",
+            "required": false,
+            "type": "text",
+            "repeatable": false
+        },
+        {
+            "key": "default-longitude",
+            "name": "Default Longitude",
+            "required": false,
+            "type": "text",
+            "repeatable": false
+        },
+        {
+            "key": "import-google-api",
+            "name": "Import Google API",
+            "required": false,
+            "type": "checkbox",
+            "repeatable": false
+        }
+	]
+}
