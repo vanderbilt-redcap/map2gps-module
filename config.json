@@ -20,9 +20,6 @@
 	"links": {
 	},
 
-	"global-settings": [
-	],
-	
 	"project-settings": [
         {
             "key": "google-api-key",
