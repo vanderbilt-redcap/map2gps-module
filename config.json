@@ -1,6 +1,8 @@
 {
 	"name": "Maps2GPS",
 
+	"namespace": "Vanderbilt\\Maps2gpsExternalModule",
+
 	"description": "Places a Google Maps box above a longitude and latitude box. Converts a pin-placement to a longitude and latitude.",
 
     "authors": [

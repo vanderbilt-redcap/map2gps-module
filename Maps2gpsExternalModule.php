@@ -1,4 +1,7 @@
-<?php namespace ExternalModules;
+<?php namespace Vanderbilt\Maps2gpsExternalModule;
+
+use ExternalModules\AbstractExternalModule;
+use ExternalModules\ExternalModules;
 
 class Maps2gpsExternalModule extends AbstractExternalModule
 {
