@@ -34,7 +34,7 @@
 			"name": "Form",
 			"required": true,
 			"type": "form-list",
-			"repeatable": true
+			"repeatable": false
 		},
 		{
 			"key": "longitude",

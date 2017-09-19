@@ -15,6 +15,11 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 
 	function placeMap($project_id, $record, $instrument, $event_id, $group_id) {
 		$desiredInstrument = $this->getProjectSetting("instrument");
+		if(is_array($desiredInstrument)){
+			// This field used to be marked as repeatable.
+			$desiredInstrument = $desiredInstrument[0];
+		}
+
 		$longitude = $this->getProjectSetting("longitude");
 		$latitude = $this->getProjectSetting("latitude");
 		$defaultZoom = $this->getProjectSetting("default-zoom");
