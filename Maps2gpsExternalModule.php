@@ -87,7 +87,7 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 				// This is the zoom level required to position the marker
 				var REQUIRED_ZOOM = 15;
                 if (typeof google.load == "undefined") {
-                    $.getScript("https://www.google.com/jsapi?key='.$key.'", function() { console.log("Got JSAPI"); initMaps(); });
+                    $.getScript("https://maps.googleapis.com/maps/api/js?key='.$key.'", function() { console.log("Got JSAPI"); initMaps(); });
                 } else {
                     console.log("Did not get JSAPI");
                     initMaps();
@@ -98,7 +98,7 @@ class Maps2gpsExternalModule extends AbstractExternalModule
                 // we have the google libraries
                 function initMaps() {
                     // http://stackoverflow.com/questions/9519673/why-does-google-load-cause-my-page-to-go-blank
-                    setTimeout(function(){ google.load("maps", "2.x", {
+                    setTimeout(function(){ google.load("maps", "3.x", {
                         callback: function () {
 				            // The google map variable
 				            map = null;
