@@ -27,6 +27,10 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 		$defaultLongitude = $this->getProjectSetting("default-longitude");
 		$import = $this->getProjectSetting("import-google-api");
 
+		$recordData = $this->getData($project_id,$record,$event_id);
+		$startLat = $recordData[$latitude];
+		$startLong = $recordData[$longitude];
+
 		$key = $this->getProjectSetting("google-api-key");
 		if (($desiredInstrument == $instrument) && $longitude && $latitude) {
 			$sql = "SELECT field_order, field_name
@@ -80,13 +84,13 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 				var MAP_DIV_ELEMENT_ID = "google_map";
 
 				var DEFAULT_ZOOM_WHEN_NO_COORDINATE_EXISTS = '.$defaultZoom.';
-				var DEFAULT_CENTER_LATITUDE = '.$defaultLatitude.';
-				var DEFAULT_CENTER_LONGITUDE = '.$defaultLongitude.';
+				var DEFAULT_CENTER_LATITUDE = '.(empty($startLat) ? $defaultLatitude : $startLat).';
+				var DEFAULT_CENTER_LONGITUDE = '.(empty($startLong) ? $defaultLongitude : $startLong).';
 				var DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS = 15;
 
 				// This is the zoom level required to position the marker
 				var REQUIRED_ZOOM = 15;
-                if (typeof google.load == "undefined") {
+                if (typeof google == "undefined" || typeof google.maps == "undefined") {
                     $.getScript("https://maps.googleapis.com/maps/api/js?key='.$key.'", function() { console.log("Got JSAPI"); initMaps(); });
                 } else {
                     console.log("Did not get JSAPI");
@@ -97,43 +101,23 @@ class Maps2gpsExternalModule extends AbstractExternalModule
                 var marker;
                 // we have the google libraries
                 function initMaps() {
-                    // http://stackoverflow.com/questions/9519673/why-does-google-load-cause-my-page-to-go-blank
-                    setTimeout(function(){ google.load("maps", "3.x", {
-                        callback: function () {
-				            // The google map variable
-				            map = null;
-				
-				            // The marker variable, when it is null no marker has been added
-				            marker = null;
-
-                            initializeGoogleMap();
-                        }
-                    }); }, 2000);
-
+					initializeGoogleMap();
                 }
 
 				function initializeGoogleMap() {
-					map = new google.maps.Map2(document.getElementById(MAP_DIV_ELEMENT_ID));
-					map.addControl(new GLargeMapControl());
-					map.addControl(new GMapTypeControl());
+					map = new google.maps.Map(document.getElementById(MAP_DIV_ELEMENT_ID),
+						{
+							zoom: DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS,
+							center: new google.maps.LatLng(DEFAULT_CENTER_LATITUDE,DEFAULT_CENTER_LONGITUDE),
+							overviewMapControl:true,
+							overviewMapControlOptions:(true),
+							mapTypeId: google.maps.MapTypeId.ROADMAP,
+							streetViewControl: false,
+							fullscreenControl: false
+						});
+					marker = new google.maps.Marker({map:map,position: new google.maps.LatLng(DEFAULT_CENTER_LATITUDE,DEFAULT_CENTER_LONGITUDE)});
 
-					map.setMapType(G_NORMAL_MAP);
-
-					var latitude = +document.getElementById(LATITUDE_ELEMENT_ID).value;
-					var longitude = +document.getElementById(LONGITUDE_ELEMENT_ID).value;
-
-					if(latitude != 0 && longitude != 0) {
-						//We have some sort of starting position, set map center and marker
-						map.setCenter(new google.maps.LatLng(latitude, longitude), DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS);
-						var point = new GLatLng(latitude, longitude);
-						marker = new GMarker(point, {draggable:false});
-						map.addOverlay(marker);
-					} else {
-						// Just set the default center, do not add a marker
-						map.setCenter(new google.maps.LatLng(DEFAULT_CENTER_LATITUDE, DEFAULT_CENTER_LONGITUDE), DEFAULT_ZOOM_WHEN_NO_COORDINATE_EXISTS);
-					}
-
-					GEvent.addListener(map, "click", googleMapClickHandler);
+					google.maps.event.addListener(map, "click", googleMapClickHandler);
 				}
 
                 $("#'.$latitude.'").change(function() { resetMarker(); });
@@ -145,35 +129,34 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 					if(latitude != 0 && longitude != 0) {
 						//We have some sort of starting positon, set map center and marker
 						map.setCenter(new google.maps.LatLng(latitude, longitude), DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS);
-						var point = new GLatLng(latitude, longitude);
+						var point = new google.maps.LatLng(latitude,longitude)
 					    if(marker == null) {
-						    marker = new GMarker(point, {draggable:false});
-						    map.addOverlay(marker);
+						    marker = new google.maps.Marker({map:map,position: point,draggable:false});
                         } else {
-						    marker.setLatLng(point);
+						    marker.position = point;
                         }
+                        marker.setMap(map);
 					} else {
 						// Just set the default center, do not add a marker
 						map.setCenter(new google.maps.LatLng(DEFAULT_CENTER_LATITUDE, DEFAULT_CENTER_LONGITUDE), DEFAULT_ZOOM_WHEN_NO_COORDINATE_EXISTS);
 					}
                 }
 
-				function googleMapClickHandler(overlay, latlng, overlaylatlng) {
-
+				function googleMapClickHandler(event) {
 					if(map.getZoom() < REQUIRED_ZOOM) {
 						alert("You need to zoom in more to set the location accurately." );
 						return;
 					}
 					if(marker == null) {
-						marker = new GMarker(latlng, {draggable:false});
-						map.addOverlay(marker);
+						marker.position = point;
 					}
 					else {
-						marker.setLatLng(latlng);
+						marker.position = event.latLng;
 					}
+					marker.setMap(map);
 
-					document.getElementById(LATITUDE_ELEMENT_ID).value = latlng.lat();
-					document.getElementById(LONGITUDE_ELEMENT_ID).value = latlng.lng();
+					document.getElementById(LATITUDE_ELEMENT_ID).value = event.latLng.lat();
+					document.getElementById(LONGITUDE_ELEMENT_ID).value = event.latLng.lng();
 				
 				}
                 ';
