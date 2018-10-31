@@ -157,7 +157,8 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 
 					document.getElementById(LATITUDE_ELEMENT_ID).value = event.latLng.lat();
 					document.getElementById(LONGITUDE_ELEMENT_ID).value = event.latLng.lng();
-				
+
+					$("#" + LATITUDE_ELEMENT_ID).change();
 				}
                 ';
             echo '}';
