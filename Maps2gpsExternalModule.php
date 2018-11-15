@@ -165,8 +165,8 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 
 			echo "</script>";
             if ($import) {
-                echo "<script type=\"text/javascript\" src=\"https://maps.googleapis.com/maps/api/js?key=".$key."\"></script>";
-            }
+
+				echo "<script type=\"text/javascript\" src=\"https://maps.googleapis.com/maps/api/js?key=".$key."&libraries=places\"></script>";}
 		}
 	}
 }
