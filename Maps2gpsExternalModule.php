@@ -14,12 +14,6 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 	}
 
 	function placeMap($project_id, $record, $instrument, $event_id, $group_id) {
-		$desiredInstrument = $this->getProjectSetting("instrument");
-		if(is_array($desiredInstrument)){
-			// This field used to be marked as repeatable.
-			$desiredInstrument = $desiredInstrument[0];
-		}
-
 		$longitude = $this->getProjectSetting("longitude");
 		$latitude = $this->getProjectSetting("latitude");
 		$defaultZoom = $this->getProjectSetting("default-zoom");
@@ -28,15 +22,23 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 		$import = $this->getProjectSetting("import-google-api");
 
 		$key = $this->getProjectSetting("google-api-key");
-		if (($desiredInstrument == $instrument) && $longitude && $latitude) {
+		if ($longitude && $latitude) {
+			$instrument = db_escape($instrument);
+
 			$sql = "SELECT field_order, field_name
 				FROM redcap_metadata
 				WHERE project_id = $project_id
+					AND form_name = '$instrument'
 					AND field_name IN ('$longitude', '$latitude');";
 			$q = db_query($sql);
 			$fieldOrder = array();
 			while ($row = db_fetch_assoc($q)) {
 				$fieldOrder[$row['field_name']] = $row['field_order'];
+			}
+
+			if(count($fieldOrder) !== 2){
+				// We must not be on the right instrument.
+				return;
 			}
 
 			echo "<script>";
@@ -45,7 +47,9 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 			} else {
 				$first = $longitude;
 			}
-            echo '
+			echo '
+				console.log("Loading Maps2GPS")
+
                 var oldBranching = doBranching;
                 doBranching = function() {
                     console.log("Revised doBranching");
