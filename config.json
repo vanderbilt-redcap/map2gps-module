@@ -30,13 +30,6 @@
 			"repeatable": false
         },
 		{
-			"key": "instrument",
-			"name": "Form",
-			"required": true,
-			"type": "form-list",
-			"repeatable": false
-		},
-		{
 			"key": "longitude",
 			"name": "Longitude Field",
 			"required": true,
