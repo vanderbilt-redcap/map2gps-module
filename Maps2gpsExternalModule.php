@@ -137,7 +137,7 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 					    if(marker == null) {
 						    marker = new google.maps.Marker({map:map,position: point,draggable:false});
                         } else {
-						    marker.position = point;
+						    marker.setPosition(point);
                         }
                         marker.setMap(map);
 					} else {
@@ -151,13 +151,6 @@ class Maps2gpsExternalModule extends AbstractExternalModule
 						alert("You need to zoom in more to set the location accurately." );
 						return;
 					}
-					if(marker == null) {
-						marker.position = point;
-					}
-					else {
-						marker.position = event.latLng;
-					}
-					marker.setMap(map);
 
 					document.getElementById(LATITUDE_ELEMENT_ID).value = event.latLng.lat();
 					document.getElementById(LONGITUDE_ELEMENT_ID).value = event.latLng.lng();
