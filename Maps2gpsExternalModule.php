@@ -58,7 +58,9 @@ class Maps2gpsExternalModule extends AbstractExternalModule
                 doBranching = function() {
                     console.log("Revised doBranching");
                     oldBranching();
-                    if ($("#'.$latitude.'-tr").is(":visible")) {
+
+                    // Show the map if the field is visible anywhere (in its normal location, or elsewhere via field embedding).
+                    if ($("[name=\"'.$latitude.'\"]").is(":visible")) {
                         $("#google_map-tr").show();
                     } else {
                         $("#google_map-tr").hide();
