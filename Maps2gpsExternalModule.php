@@ -71,7 +71,7 @@ class Maps2gpsExternalModule extends AbstractExternalModule
             echo "$('[name=\"$longitude\"]').attr('id', '$longitude');";
             echo "$('[name=\"$latitude\"]').attr('id', '$latitude');";
             $width = 600;
-			echo "$('#$first').closest('tr').before(\"<tr id='google_map-tr'><td colspan='2' style='text-align: center;'><div style='width:".$width."px; font-size: 12px; font-style: italic;'>Use the controls to zoom. Double click to set the coordinates.</div><div id='google_map' style='width:".$width."px; height:450px;'></div></td></tr>\");";
+			echo "$('#$first').closest('tr[id$=\'-tr\']').before(\"<tr id='google_map-tr'><td colspan='2' style='text-align: center;'><div style='width:".$width."px; font-size: 12px; font-style: italic;'>Use the controls to zoom. Double click to set the coordinates.</div><div id='google_map' style='width:".$width."px; height:450px;'></div></td></tr>\");";
 
             if (!$defaultLatitude) {
                 $defaultLatitude = 40;
