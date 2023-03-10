@@ -4,7 +4,7 @@ The Maps 2 GPS module allows a Google Maps input to be added to a field which ca
 
 ## Setting up the module
 
-This module requires a Google API in order to use Google Maps. This can be obtained by following the instructions here: [https://developers.google.com/maps/documentation/javascript/get-api-key](https://developers.google.com/maps/documentation/javascript/get-api-key)
+This module requires a Google API Key in order to connect to Google Maps. This can be obtained by following the instructions here: [https://developers.google.com/maps/documentation/javascript/get-api-key](https://developers.google.com/maps/documentation/javascript/get-api-key)
 
 ## Changes
 - v1.0 - Initial Release
